@@ -1,0 +1,79 @@
+<head>
+    <title>CQRS - meteorapp</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div class="row-fluid">
+        <div class="span4 well products">
+            {{> productlist}}
+        </div>
+        <div class="span4 well cart">
+            {{> cartlist}}
+        </div>
+        <div class="span3 well">
+            {{> oplogqueue}}
+        </div>
+        <div class="span1">
+            {{> loginButtons align="right"}}
+        </div>
+    </div> 
+</body>
+
+<template name="productlist">
+    <h1>Product List</h1>
+    <ul class="unstyled">
+    {{# each products}}
+        {{> product}}
+    {{/each}}
+    </ul>
+</template>
+
+<template name="product">
+    <li>
+        <div><strong>Product Id:</strong> {{_id._str}}</div>
+        <div><strong>Product Name:</strong> {{name}}</div>
+        <div><strong>Product Description:</strong> {{description}}</div>
+        <div><strong>Product price:</strong> <span class="badge badge-warning"> $ {{price}}</span></div>
+        {{#if currentUser}}
+        <div style="padding-left: 320px;" ><a href="#" class="btn-primary btn-small active btnAddToCart"><i class="icon-shopping-cart"></i>Add to Cart</a></div>
+        {{/if}}
+    </li>
+</template>
+
+
+<template name="cartlist">
+    <h1>Your Shopping Cart</h1>
+    <ul>
+        {{# each cproducts}}
+            {{> cproduct}}
+        {{/each}}
+    </ul>
+</template>
+
+<template name="cproduct">
+    <li>{{name}}</li>
+</template>
+
+<template name="oplogqueue">
+    <h1>Operations Logs</h1>
+    <ul  class="unstyled">
+        {{# each cqrslogs}}
+            {{> cqrslog}}
+        {{/each}}
+    </ul>
+</template>
+
+<template name="cqrslog">
+    <li>
+        <div>{{description}}
+            {{#if statusIsInitiated  'Initiated'}}
+                <span class="label label-important">{{status}}</span>
+            {{/if}}
+            {{#if statusIsCompleted  'Complete'}}
+                <span class="label label-success">{{status}}</span>
+            {{/if}}
+            By {{userid}}
+        </div>
+    </li>
+</template>
